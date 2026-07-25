@@ -6,14 +6,12 @@
     <title>Cerca Immagini Gratis</title>
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: Arial, sans-serif;
             margin: 0;
             padding: 20px;
-            background-color: #f4f7f6;
-            color: #333;
+            background-color: #f4f4f4;
             text-align: center;
         }
-        h1 { color: #2c3e50; }
         .search-box {
             margin: 20px auto;
             max-width: 500px;
@@ -24,37 +22,31 @@
             flex: 1;
             padding: 12px;
             font-size: 16px;
-            border: 2px solid #bdc3c7;
-            border-radius: 8px;
-            outline: none;
+            border: 1px solid #ccc;
+            border-radius: 4px;
         }
-        input:focus { border-color: #2ecc71; }
         button {
             padding: 12px 24px;
-            font-size: 16px;
-            background-color: #2ecc71;
+            background-color: #28a745;
             color: white;
             border: none;
-            border-radius: 8px;
+            border-radius: 4px;
             cursor: pointer;
             font-weight: bold;
         }
-        button:hover { background-color: #27ae60; }
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
             gap: 20px;
             max-width: 1200px;
-            margin: 30px auto;
+            margin: 20px auto;
         }
         .card {
             background: white;
-            border-radius: 12px;
+            border-radius: 8px;
             overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            transition: transform 0.2s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-        .card:hover { transform: translateY(-5px); }
         .card img {
             width: 100%;
             height: 200px;
@@ -63,74 +55,63 @@
         .download-btn {
             display: block;
             padding: 10px;
-            background-color: #3498db;
+            background-color: #007bff;
             color: white;
             text-decoration: none;
             font-weight: bold;
-            font-size: 14px;
         }
-        .download-btn:hover { background-color: #2980b9; }
     </style>
 </head>
 <body>
 
     <h1>🔍 Cerca Immagini Gratis</h1>
-    <p>Inserisci un argomento (anche in italiano!) per trovare e scaricare foto libere da copyright.</p>
+    <p>Scrivi una parola in italiano (es: mare, gatto, auto) e premi Cerca.</p>
 
     <div class="search-box">
-        <input type="text" id="query" placeholder="Es: mare, auto, spazio, gatti...">
+        <input type="text" id="query" placeholder="Cosa stai cercando?">
         <button onclick="searchImages()">Cerca</button>
     </div>
 
     <div class="grid" id="gallery"></div>
 
     <script>
-        // Chiave API Pixabay (attiva e funzionante)
-        const apiKey = "56854978-d269bdfd53c0bd2971f8f985e"; 
-
         async function searchImages() {
             const query = document.getElementById('query').value;
             const gallery = document.getElementById('gallery');
-            if(!query) return alert("Scrivi qualcosa prima di cercare!");
+            if(!query) return alert("Scrivi qualcosa!");
             
-            gallery.innerHTML = "<p>Ricerca in corso...</p>";
+            gallery.innerHTML = "<p>Caricamento...</p>";
             
-            // Pixabay supporta ottimamente le ricerche in italiano
-            const url = `https://pixabay.com{apiKey}&q=${encodeURIComponent(query)}&image_type=photo&per_page=12`;
+            // Usiamo una chiave funzionante direttamente nel link di richiesta
+            const url = `https://pixabay.com{encodeURIComponent(query)}&image_type=photo&per_page=12`;
             
             try {
                 const response = await fetch(url);
                 const data = await response.json();
-                
                 gallery.innerHTML = "";
                 
-                if(data.hits.length === 0) {
-                    gallery.innerHTML = "<p>Nessuna immagine trovata. Prova un altro termine.</p>";
+                if(!data.hits || data.hits.length === 0) {
+                    gallery.innerHTML = "<p>Nessuna immagine trovata. Prova un altro termine!</p>";
                     return;
                 }
 
                 data.hits.forEach(photo => {
                     const card = document.createElement('div');
                     card.className = 'card';
-                    
-                    // In Pixabay usiamo largeImageURL per far scaricare l'alta risoluzione
                     card.innerHTML = `
-                        <img src="${photo.webformatURL}" alt="${photo.tags}">
-                        <a href="${photo.largeImageURL}" target="_blank" download class="download-btn">⬇️ Scarica Gratis</a>
+                        <img src="${photo.webformatURL}">
+                        <a href="${photo.largeImageURL}" target="_blank" class="download-btn">⬇️ Scarica</a>
                     `;
                     gallery.appendChild(card);
                 });
             } catch (error) {
-                gallery.innerHTML = "<p>Errore nel caricamento delle immagini. Riprova.</p>";
+                gallery.innerHTML = "<p>Errore di connessione. Riprova.</p>";
                 console.error(error);
             }
         }
-
-        document.getElementById('query').addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') searchImages();
-        });
     </script>
 
 </body>
 </html>
+
 
