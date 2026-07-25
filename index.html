@@ -7,7 +7,6 @@
     <style>
         body { font-family: Arial, sans-serif; text-align: center; background: #f0f2f5; padding: 20px; margin: 0; }
         
-        /* Stile per l'etichetta del sito sperimentale */
         .experimental-badge {
             background-color: #e67e22;
             color: white;
@@ -26,7 +25,7 @@
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; max-width: 1200px; margin: 30px auto; }
         .card { background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .card img { width: 100%; height: 200px; object-fit: cover; border-radius: 4px; background-color: #eaeaea; }
-        .btn { display: block; margin-top: 10px; padding: 10px; background: #28a745; color: white; text-decoration: none; border-radius: 4px; font-weight: bold; }
+        .btn { display: block; margin-top: 10px; padding: 10px; background: #28a745; color: white; text-decoration: none; border-radius: 4px; font-weight: bold; cursor: pointer; border: none; width: 100%; box-sizing: border-box; font-size: 14px; }
         .btn:hover { background: #218838; }
     </style>
 </head>
@@ -36,7 +35,7 @@
     <div class="experimental-badge">🛠️ Sito in fase sperimentale</div>
 
     <div class="alert-banner">
-        ⚠️ NOTA: Se riscontri problemi nel download, disattiva l'AdBlock per questo sito.
+        ⚠️ NOTA: Se riscontri problemi nel download, disattiva l'AdBlock per questo sito e dai le autorizzazioni.
     </div>
 
     <h1>📸 Galleria Immagini Gratis da Scaricare</h1>
@@ -45,35 +44,57 @@
     <div class="grid">
         <!-- Foto 1: Gatto -->
         <div class="card">
-            <img src="https://wikimedia.org" alt="Gatto">
-            <a href="https://wikimedia.org" target="_blank" download="gatto.jpg" class="btn">⬇️ Scarica Foto</a>
+            <img src="https://unsplash.com" alt="Gatto">
+            <button onclick="forzaDownload('https://unsplash.com', 'gatto.jpg')" class="btn">⬇️ Scarica Foto</button>
         </div>
         <!-- Foto 2: Auto Sportiva -->
         <div class="card">
-            <img src="https://wikimedia.org" alt="Auto">
-            <a href="https://wikimedia.org" target="_blank" download="auto.jpg" class="btn">⬇️ Scarica Foto</a>
+            <img src="https://unsplash.com" alt="Auto">
+            <button onclick="forzaDownload('https://unsplash.com', 'auto.jpg')" class="btn">⬇️ Scarica Foto</button>
         </div>
         <!-- Foto 3: Spazio -->
         <div class="card">
-            <img src="https://wikimedia.org" alt="Spazio">
-            <a href="https://wikimedia.org" target="_blank" download="spazio.jpg" class="btn">⬇️ Scarica Foto</a>
+            <img src="https://unsplash.com" alt="Spazio">
+            <button onclick="forzaDownload('https://unsplash.com', 'spazio.jpg')" class="btn">⬇️ Scarica Foto</button>
         </div>
-        <!-- Foto 4: Natura / Paesaggio -->
+        <!-- Foto 4: Natura -->
         <div class="card">
-            <img src="https://wikimedia.org" alt="Natura">
-            <a href="https://wikimedia.org" target="_blank" download="natura.jpg" class="btn">⬇️ Scarica Foto</a>
+            <img src="https://unsplash.com" alt="Natura">
+            <button onclick="forzaDownload('https://unsplash.com', 'natura.jpg')" class="btn">⬇️ Scarica Foto</button>
         </div>
-        <!-- Foto 5: Città di Notte -->
+        <!-- Foto 5: Città -->
         <div class="card">
-            <img src="https://wikimedia.org" alt="Città">
-            <a href="https://wikimedia.org" target="_blank" download="citta.jpg" class="btn">⬇️ Scarica Foto</a>
+            <img src="https://unsplash.com" alt="Città">
+            <button onclick="forzaDownload('https://unsplash.com', 'citta.jpg')" class="btn">⬇️ Scarica Foto</button>
         </div>
-        <!-- Foto 6: Mare Tropicale -->
+        <!-- Foto 6: Mare -->
         <div class="card">
-            <img src="https://wikimedia.org" alt="Mare">
-            <a href="https://wikimedia.org" target="_blank" download="mare.jpg" class="btn">⬇️ Scarica Foto</a>
+            <img src="https://unsplash.com" alt="Mare">
+            <button onclick="forzaDownload('https://unsplash.com', 'mare.jpg')" class="btn">⬇️ Scarica Foto</button>
         </div>
     </div>
+
+    <script>
+        // Funzione per forzare il download reale bypassando i blocchi del server esterno
+        async function forzaDownload(urlImmagine, nomeFile) {
+            try {
+                const risposta = await fetch(urlImmagine);
+                const fileBlob = await risposta.blob();
+                const urlLocale = URL.createObjectURL(fileBlob);
+                
+                const linkFinto = document.createElement('a');
+                linkFinto.href = urlLocale;
+                linkFinto.download = nomeFile;
+                document.body.appendChild(linkFinto);
+                linkFinto.click();
+                document.body.removeChild(linkFinto);
+                URL.revokeObjectURL(urlLocale);
+            } catch (errore) {
+                // Se il browser blocca il codice di download automatico, apre l'immagine a schermo intero
+                window.open(urlImmagine, '_blank');
+            }
+        }
+    </script>
 
 </body>
 </html>
