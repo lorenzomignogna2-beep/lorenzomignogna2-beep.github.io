@@ -7,7 +7,6 @@
     <style>
         body { font-family: Arial, sans-serif; text-align: center; background: #f0f2f5; padding: 20px; margin: 0; }
         
-        /* Stile per l'avviso dell'AdBlock e delle autorizzazioni */
         .alert-banner {
             background-color: #fff3cd;
             color: #856404;
@@ -34,14 +33,13 @@
 </head>
 <body>
 
-    <!-- Banner di Avviso in alto sulla pagina -->
     <div class="alert-banner">
         ⚠️ NOTA: Se riscontri problemi nel caricamento o nel download delle immagini, <br>
         disattiva l'AdBlock per questo sito e concedi al browser l'autorizzazione a scaricare i file.
     </div>
 
     <h1>🔍 Cerca Immagini Gratis</h1>
-    <p>Scrivi un argomento qualsiasi (es: natura, auto, spazio) e premi Cerca.</p>
+    <p>Scrivi un argomento qualsiasi (meglio in inglese per avere più risultati, es: nature, cars, space) e premi Cerca.</p>
 
     <div class="box">
         <input type="text" id="parola" placeholder="Cosa stai cercando?">
@@ -59,16 +57,18 @@
             risultati.innerHTML = "<p>Caricamento immagini...</p>";
             risultati.innerHTML = "";
             
+            // Genera 6 immagini reali diverse basate sulla parola cercata
             for(let i = 1; i <= 6; i++) {
                 const card = document.createElement('div');
                 card.className = 'card';
                 
-                // Link pulito e privo di variabili complesse per garantire la massima stabilità
-                const urlImmagine = "https://unsplash.com";
+                // Questo link genera foto reali collegate alla parola inserita (es. gatto, mare, ecc.)
+                const urlImmagine = `https://unsplash.com{encodeURIComponent(parola)}&sig=${i}`;
 
+                // Il tag 'download' dice al browser di scaricare il file invece di aprire solo la pagina
                 card.innerHTML = `
-                    <img src="${urlImmagine}" alt="Foto">
-                    <a href="${urlImmagine}" target="_blank" class="btn">⬇️ Scarica Foto</a>
+                    <img src="${urlImmagine}" alt="${parola}">
+                    <a href="${urlImmagine}" download="immagine-${parola}-${i}.jpg" target="_blank" class="btn">⬇️ Scarica Foto</a>
                 `;
                 risultati.appendChild(card);
             }
