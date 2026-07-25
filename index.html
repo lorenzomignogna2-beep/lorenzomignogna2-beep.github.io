@@ -1,117 +1,24 @@
-<!DOCTYPE html>
-<html lang="it">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cerca Immagini Gratis</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f4f4f4;
-            text-align: center;
-        }
-        .search-box {
-            margin: 20px auto;
-            max-width: 500px;
-            display: flex;
-            gap: 10px;
-        }
-        input {
-            flex: 1;
-            padding: 12px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        button {
-            padding: 12px 24px;
-            background-color: #28a745;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
-            max-width: 1200px;
-            margin: 20px auto;
-        }
-        .card {
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        .card img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-        }
-        .download-btn {
-            display: block;
-            padding: 10px;
-            background-color: #007bff;
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-        }
-    </style>
-</head>
-<body>
-
-    <h1>🔍 Cerca Immagini Gratis</h1>
-    <p>Scrivi una parola in italiano (es: mare, gatto, auto) e premi Cerca.</p>
-
-    <div class="search-box">
-        <input type="text" id="query" placeholder="Cosa stai cercando?">
-        <button onclick="searchImages()">Cerca</button>
-    </div>
-
-    <div class="grid" id="gallery"></div>
-
     <script>
-        async function searchImages() {
+        function searchImages() {
             const query = document.getElementById('query').value;
             const gallery = document.getElementById('gallery');
             if(!query) return alert("Scrivi qualcosa!");
             
-            gallery.innerHTML = "<p>Caricamento...</p>";
+            gallery.innerHTML = "<p>Caricamento immagini di prova...</p>";
             
-            // Usiamo una chiave funzionante direttamente nel link di richiesta
-            const url = `https://pixabay.com{encodeURIComponent(query)}&image_type=photo&per_page=12`;
-            
-            try {
-                const response = await fetch(url);
-                const data = await response.json();
+            setTimeout(() => {
                 gallery.innerHTML = "";
-                
-                if(!data.hits || data.hits.length === 0) {
-                    gallery.innerHTML = "<p>Nessuna immagine trovata. Prova un altro termine!</p>";
-                    return;
-                }
-
-                data.hits.forEach(photo => {
+                // Genera 6 immagini finte basate sulla parola cercata
+                for(let i=1; i<=6; i++) {
                     const card = document.createElement('div');
                     card.className = 'card';
+                    const imgUrl = `https://picsum.photos{i}`;
                     card.innerHTML = `
-                        <img src="${photo.webformatURL}">
-                        <a href="${photo.largeImageURL}" target="_blank" class="download-btn">⬇️ Scarica</a>
+                        <img src="${imgUrl}">
+                        <a href="${imgUrl}" target="_blank" class="download-btn">⬇️ Scarica</a>
                     `;
                     gallery.appendChild(card);
-                });
-            } catch (error) {
-                gallery.innerHTML = "<p>Errore di connessione. Riprova.</p>";
-                console.error(error);
-            }
+                }
+            }, 500);
         }
     </script>
-
-</body>
-</html>
-
-
