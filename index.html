@@ -3,25 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generatore Immagini Gratis</title>
+    <title>Cerca Immagini Gratis</title>
     <style>
-        body { font-family: sans-serif; text-align: center; background: #f0f2f5; padding: 20px; }
+        body { font-family: sans-serif; text-align: center; background: #f0f2f5; padding: 20px; margin: 0; }
         .box { margin: 20px auto; max-width: 400px; display: flex; gap: 10px; }
-        input { flex: 1; padding: 10px; font-size: 16px; border: 1px solid #ccc; border-radius: 4px; }
-        button { padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; margin-top: 20px; }
+        input { flex: 1; padding: 12px; font-size: 16px; border: 1px solid #ccc; border-radius: 4px; }
+        button { padding: 12px 24px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        button:hover { background: #0056b3; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; max-width: 1200px; margin: 20px auto; }
         .card { background: white; padding: 10px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .card img { width: 100%; height: 200px; object-fit: cover; border-radius: 4px; }
-        .btn { display: block; margin-top: 10px; padding: 8px; background: #28a745; color: white; text-decoration: none; border-radius: 4px; font-weight: bold; }
+        .btn { display: block; margin-top: 10px; padding: 10px; background: #28a745; color: white; text-decoration: none; border-radius: 4px; font-weight: bold; }
+        .btn:hover { background: #218838; }
     </style>
 </head>
 <body>
 
     <h1>🔍 Cerca Immagini Gratis</h1>
-    <p>Scrivi un argomento qualsiasi (es: natura, sport, spazio) e premi Cerca.</p>
+    <p>Scrivi un argomento qualsiasi (es: natura, auto, spazio) e premi Cerca.</p>
 
     <div class="box">
-        <input type="text" id="parola" placeholder="Cosa cerchi?">
+        <input type="text" id="parola" placeholder="Cosa stai cercando?">
         <button onclick="trovaFoto()">Cerca</button>
     </div>
 
@@ -33,6 +35,9 @@
             const risultati = document.getElementById('risultati');
             if(!parola) return alert("Scrivi qualcosa!");
             
+            risultati.innerHTML = "<p>Caricamento immagini...</p>";
+            
+            // Pulisce la griglia prima di mostrare i risultati
             risultati.innerHTML = "";
             
             // Genera 6 immagini ad alta definizione collegate al testo cercato
@@ -40,13 +45,12 @@
                 const card = document.createElement('div');
                 card.className = 'card';
                 
-                // Usiamo il motore Source Unsplash libero senza blocchi
-                const imgUrl = `https://unsplash.com`; 
-                const randomUrl = `https://picsum.photos{Math.floor(Math.random() * 1000)}`;
+                // Indirizzo di rete pulito per il motore di immagini senza chiavi API
+                const urlImmagine = "https://picsum.photos" + i + "-" + encodeURIComponent(parola);
 
                 card.innerHTML = `
-                    <img src="${randomUrl}" alt="Immagine">
-                    <a href="${randomUrl}" target="_blank" class="btn">⬇️ Scarica Foto</a>
+                    <img src="${urlImmagine}" alt="Foto">
+                    <a href="${urlImmagine}" target="_blank" class="btn">⬇️ Scarica Foto</a>
                 `;
                 risultati.appendChild(card);
             }
